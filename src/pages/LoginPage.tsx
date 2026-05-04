@@ -76,7 +76,7 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between px-1">
                   <label className="text-xs font-black uppercase tracking-widest text-[#204E59]/60">Contraseña</label>
-                  <Link to="/forgot-password" underline="none" className="text-xs font-black text-[#66B2B2] hover:text-[#F26C6D] transition-colors">
+                  <Link to="/forgot-password" className="text-xs font-black text-[#66B2B2] hover:text-[#F26C6D] transition-colors">
                     ¿Olvidaste la clave?
                   </Link>
                 </div>

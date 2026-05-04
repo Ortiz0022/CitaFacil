@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, ArrowLeft, CheckCircle2, Send } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
@@ -15,32 +17,28 @@ export default function ForgotPasswordPage() {
     setError('');
 
     try {
-      // NOTA: Para que esto funcione realmente, debes configurar tu cuenta en EmailJS
-      // y reemplazar estos valores con tus IDs reales.
-      // https://www.emailjs.com/
-      
+      const resetLink = `${window.location.origin}/reset-password?email=${encodeURIComponent(email)}`;
+
       const templateParams = {
-        to_email: email,
-        reply_to: 'soporte@citafacil.com',
-        message: 'Has solicitado restablecer tu contraseña. Haz clic en el enlace adjunto para continuar.',
+        email: email, // Coincide con {{email}} en tu template
+        link: resetLink, // Coincide con {{link}} en tu template
+        user_name: email.split('@')[0],
       };
 
-      // Si tienes tus llaves listas, descomenta esto y rellena los datos:
-      /*
-      await emailjs.send(
-        'YOUR_SERVICE_ID', 
-        'YOUR_TEMPLATE_ID', 
-        templateParams, 
-        'YOUR_PUBLIC_KEY'
-      );
-      */
+      // CONFIGURACIÓN DE EMAILJS:
+      // He puesto tus IDs de las capturas. 
+      // Solo falta tu PUBLIC_KEY (la encuentras en EmailJS -> Account -> Public Key)
 
-      // Simulamos éxito para la demo si no hay llaves configuradas
-      await new Promise(r => setTimeout(r, 1500));
-      
+      await emailjs.send(
+        'service_b9g67z7',
+        'template_uavg1he',
+        templateParams,
+        'sWAis4nOO0DyfBcXQ' // <--- DEBES PEGAR TU PUBLIC KEY AQUÍ
+      );
+
       setLoading(false);
       setSent(true);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error enviando email:', err);
       setError('No pudimos enviar el correo. Por favor intenta más tarde.');
       setLoading(false);

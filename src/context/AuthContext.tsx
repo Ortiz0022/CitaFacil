@@ -9,6 +9,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
   updateUser: (data: Partial<User>) => void;
+  resetPassword: (email: string, newPassword: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -91,8 +92,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const resetPassword = async (email: string, newPassword: string): Promise<boolean> => {
+    await new Promise(r => setTimeout(r, 1000));
+    
+    const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+    const userIndex = registeredUsers.findIndex((u: any) => u.email.toLowerCase() === email.toLowerCase());
+
+    if (userIndex !== -1) {
+      registeredUsers[userIndex].password = newPassword;
+      localStorage.setItem('registered_users', JSON.stringify(registeredUsers));
+      return true;
+    }
+    
+    // Si es el usuario demo hardcodeado, también permitimos "resetearlo" guardándolo ahora
+    if (email === 'juan.garcia@email.com') {
+      const newUser = { ...mockUser, email, password: newPassword };
+      registeredUsers.push(newUser);
+      localStorage.setItem('registered_users', JSON.stringify(registeredUsers));
+      return true;
+    }
+
+    return false;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, register, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, register, logout, updateUser, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

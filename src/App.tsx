@@ -15,6 +15,7 @@ import ProfilePage from './pages/ProfilePage';
 import NotificationsPage from './pages/NotificationsPage';
 import LogoutPage from './pages/LogoutPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/dashboard" element={<DashboardPage />} />
