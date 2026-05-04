@@ -1,17 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Bell, LogOut, Menu, X, Calendar } from 'lucide-react';
+import { Bell, LogOut, Menu, X, Calendar, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { mockNotifications } from '../../data/mockData';
+import { useNotifications } from '../../context/NotificationsContext';
+import Modal from '../ui/Modal';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { unreadCount } = useNotifications();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const unread = mockNotifications.filter(n => !n.read).length;
+  const [logoutOpen, setLogoutOpen] = useState(false);
+  const unread = unreadCount;
 
-  const handleLogout = () => {
+  const handleLogoutConfirm = () => {
     logout();
+    setLogoutOpen(false);
+    setMobileOpen(false);
     navigate('/');
   };
 
@@ -25,6 +30,53 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white border-b border-slate-100 sticky top-0 z-40">
+      <Modal isOpen={logoutOpen} onClose={() => setLogoutOpen(false)} title="" size="sm">
+        <div className="text-center">
+          {/* Icono de advertencia */}
+          <div className="mx-auto w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mb-4">
+            <AlertTriangle size={32} className="text-amber-500" />
+          </div>
+          
+          {/* Título y mensaje */}
+          <h3 className="text-xl font-bold text-slate-900 mb-2">¿Cerrar sesión?</h3>
+          <p className="text-slate-600 text-sm mb-6 leading-relaxed">
+            Estás a punto de salir de tu cuenta. <br />
+            Tu sesión actual se cerrará y deberás iniciar sesión nuevamente para acceder.
+          </p>
+          
+          {/* Información del usuario */}
+          {user && (
+            <div className="bg-slate-50 rounded-xl p-3 mb-6 flex items-center gap-3">
+              <img
+                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}&backgroundColor=2dd4bf`}
+                alt={user.name}
+                className="w-10 h-10 rounded-lg"
+              />
+              <div className="text-left">
+                <p className="text-sm font-semibold text-slate-900">{user.name}</p>
+                <p className="text-xs text-slate-500">Sesión activa</p>
+              </div>
+            </div>
+          )}
+          
+          {/* Botones de acción */}
+          <div className="flex gap-3">
+            <button
+              onClick={() => setLogoutOpen(false)}
+              className="flex-1 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50 transition-all duration-200"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleLogoutConfirm}
+              className="flex-1 px-4 py-2.5 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              <LogOut size={16} />
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </Modal>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -73,7 +125,7 @@ export default function Navbar() {
                   <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Paciente</span>
                 </div>
                 <button
-                  onClick={handleLogout}
+                  onClick={() => setLogoutOpen(true)}
                   className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                   title="Cerrar sesión"
                 >
@@ -108,7 +160,7 @@ export default function Navbar() {
               </Link>
             ))}
             <button
-              onClick={handleLogout}
+              onClick={() => setLogoutOpen(true)}
               className="flex items-center gap-3 w-full py-3 px-4 text-base font-semibold text-red-500 hover:bg-red-50 rounded-xl mt-2 transition-all"
             >
               <LogOut size={18} /> Cerrar sesión

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Bell, Mail, MessageSquare, Smartphone, Clock, CheckCircle2, Save } from 'lucide-react';
-import { mockNotifications, mockNotificationSettings } from '../data/mockData';
-import type { NotificationSettings } from '../types';
+import { useNotifications } from '../context/NotificationsContext';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import { format, parseISO } from 'date-fns';
@@ -23,17 +22,8 @@ const REMINDER_OPTIONS = [
 ];
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState(mockNotifications);
-  const [settings, setSettings] = useState<NotificationSettings>(mockNotificationSettings);
+  const { notifications, settings, setSettings, markRead, markAllRead, unreadCount } = useNotifications();
   const [saved, setSaved] = useState(false);
-
-  const markRead = (id: string) => {
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
-  };
-
-  const markAllRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-  };
 
   const saveSettings = async () => {
     await new Promise(r => setTimeout(r, 500));
@@ -41,7 +31,7 @@ export default function NotificationsPage() {
     setTimeout(() => setSaved(false), 3000);
   };
 
-  const unread = notifications.filter(n => !n.read).length;
+  const unread = unreadCount;
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">

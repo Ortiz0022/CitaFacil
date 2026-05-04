@@ -1,160 +1,190 @@
 import type { Professional, Appointment, Notification, NotificationSettings } from '../types';
 
-export const mockProfessionals: Professional[] = [
-  {
-    id: 'p1',
-    name: 'Dra. Ana Martínez',
-    specialty: 'Medicina General',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ana&backgroundColor=b6e3f4',
-    rating: 4.9,
-    reviewCount: 128,
-    availableDays: [1, 2, 3, 4, 5],
-    availableHours: ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00'],
-    bio: 'Médica general con 12 años de experiencia. Especializada en medicina preventiva y atención primaria.',
-  },
-  {
-    id: 'p2',
-    name: 'Dr. Carlos Rodríguez',
-    specialty: 'Cardiología',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos&backgroundColor=ffd5dc',
-    rating: 4.8,
-    reviewCount: 94,
-    availableDays: [1, 3, 5],
-    availableHours: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '15:00', '15:30', '16:00', '16:30'],
-    bio: 'Cardiólogo certificado con enfoque en enfermedades cardiovasculares y prevención de infartos.',
-  },
-  {
-    id: 'p3',
-    name: 'Dra. Sofía Herrera',
-    specialty: 'Dermatología',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sofia&backgroundColor=c0aede',
-    rating: 4.7,
-    reviewCount: 210,
-    availableDays: [2, 4, 6],
-    availableHours: ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '13:00', '13:30', '14:00', '14:30'],
-    bio: 'Dermatóloga especializada en dermatología cosmética y enfermedades de la piel.',
-  },
-  {
-    id: 'p4',
-    name: 'Dr. Luis Pacheco',
-    specialty: 'Ortopedia',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Luis&backgroundColor=d1f4e0',
-    rating: 4.6,
-    reviewCount: 76,
-    availableDays: [1, 2, 4, 5],
-    availableHours: ['07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '16:00', '16:30', '17:00'],
-    bio: 'Ortopedista con experiencia en cirugía de rodilla, cadera y columna vertebral.',
-  },
-  {
-    id: 'p5',
-    name: 'Dra. María Jiménez',
-    specialty: 'Pediatría',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maria&backgroundColor=ffdfbf',
-    rating: 4.95,
-    reviewCount: 312,
-    availableDays: [1, 2, 3, 4, 5],
-    availableHours: ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00'],
-    bio: 'Pediatra con vocación de servicio y más de 15 años cuidando la salud de los niños.',
-  },
+function createRng(seed: number) {
+  // Linear congruential generator (deterministic, lightweight)
+  let state = seed >>> 0;
+  return () => {
+    state = (1664525 * state + 1013904223) >>> 0;
+    return state / 0x100000000;
+  };
+}
+
+function pickOne<T>(rng: () => number, items: T[]): T {
+  return items[Math.floor(rng() * items.length)];
+}
+
+function intBetween(rng: () => number, min: number, max: number) {
+  return Math.floor(rng() * (max - min + 1)) + min;
+}
+
+function formatDate(d: Date) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function formatIso(d: Date) {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${formatDate(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+const now = new Date();
+const runtimeSeed =
+  Math.floor(Math.random() * 1_000_000_000) ^
+  (now.getFullYear() * 10_000 + (now.getMonth() + 1) * 100 + now.getDate());
+const rng = createRng(runtimeSeed);
+
+const firstNames = ['Ana', 'Sofía', 'María', 'Valeria', 'Laura', 'Daniel', 'Carlos', 'Luis', 'Jorge', 'Andrés', 'Paula', 'Camila'];
+const lastNames = ['Martínez', 'Rodríguez', 'Herrera', 'Pacheco', 'Jiménez', 'Vargas', 'Morales', 'Soto', 'Gómez', 'Navarro', 'Rojas', 'Castro'];
+const specialties = ['Medicina General', 'Cardiología', 'Dermatología', 'Ortopedia', 'Pediatría', 'Ginecología', 'Neurología', 'Nutrición'];
+const bios = [
+  'Atención centrada en el paciente con enfoque preventivo y seguimiento integral.',
+  'Experiencia clínica sólida y comunicación clara para resolver tus dudas.',
+  'Enfoque en diagnóstico oportuno y tratamientos basados en evidencia.',
+  'Acompañamiento cercano, plan de cuidado personalizado y educación en salud.',
 ];
 
+function randomFullName() {
+  const fn = pickOne(rng, firstNames);
+  const ln = pickOne(rng, lastNames);
+  const isFemale = ['Ana', 'Sofía', 'María', 'Valeria', 'Laura', 'Paula', 'Camila'].includes(fn);
+  const prefix = isFemale ? 'Dra.' : 'Dr.';
+  return `${prefix} ${fn} ${ln}`;
+}
+
+function randomAvailableDays() {
+  const days = [1, 2, 3, 4, 5, 6];
+  const count = intBetween(rng, 3, 5);
+  const selected: number[] = [];
+  while (selected.length < count) {
+    const d = pickOne(rng, days);
+    if (!selected.includes(d)) selected.push(d);
+  }
+  return selected.sort((a, b) => a - b);
+}
+
+function randomAvailableHours() {
+  const base = ['07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'];
+  const count = intBetween(rng, 8, 12);
+  const selected: string[] = [];
+  while (selected.length < count) {
+    const h = pickOne(rng, base);
+    if (!selected.includes(h)) selected.push(h);
+  }
+  return selected.sort();
+}
+
+function dateFromNow(daysOffset: number) {
+  const d = new Date();
+  d.setDate(d.getDate() + daysOffset);
+  return d;
+}
+
+export const mockProfessionals: Professional[] = Array.from({ length: 5 }).map((_, idx) => {
+  const name = randomFullName();
+  const specialty = pickOne(rng, specialties);
+  const rating = Math.round((4.4 + rng() * 0.6) * 10) / 10;
+  const reviewCount = intBetween(rng, 30, 340);
+  const availableDays = randomAvailableDays();
+  const availableHours = randomAvailableHours();
+  const seed = encodeURIComponent(name);
+  const bg = pickOne(rng, ['b6e3f4', 'ffd5dc', 'c0aede', 'd1f4e0', 'ffdfbf', '95d5d2', 'fde68a']);
+
+  return {
+    id: `p${idx + 1}`,
+    name,
+    specialty,
+    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=${bg}`,
+    rating,
+    reviewCount,
+    availableDays,
+    availableHours,
+    bio: pickOne(rng, bios),
+  };
+});
+
+const userFirstName = pickOne(rng, firstNames);
+const userLastName = pickOne(rng, lastNames);
 export const mockUser = {
   id: 'u1',
-  name: 'Juan García',
-  email: 'juan.garcia@email.com',
-  phone: '+506 8888-1234',
+  name: `${userFirstName} ${userLastName}`,
+  email: `${userFirstName}.${userLastName}`.toLowerCase() + '@email.com',
+  phone: `+506 ${intBetween(rng, 7000, 8999)}-${intBetween(rng, 1000, 9999)}`,
   role: 'patient' as const,
-  createdAt: '2024-01-15',
+  createdAt: formatDate(dateFromNow(-intBetween(rng, 200, 900))),
 };
 
-export const mockAppointments: Appointment[] = [
-  {
-    id: 'a1',
-    userId: 'u1',
-    professionalId: 'p1',
-    professional: mockProfessionals[0],
-    date: '2026-05-10',
-    time: '09:00',
-    reason: 'Consulta de rutina anual',
-    notes: 'Traer exámenes de sangre recientes',
-    status: 'scheduled',
-    createdAt: '2026-04-20',
-  },
-  {
-    id: 'a2',
-    userId: 'u1',
-    professionalId: 'p3',
-    professional: mockProfessionals[2],
-    date: '2026-05-15',
-    time: '10:00',
-    reason: 'Revisión de lunares',
-    status: 'scheduled',
-    createdAt: '2026-04-22',
-  },
-  {
-    id: 'a3',
-    userId: 'u1',
-    professionalId: 'p2',
-    professional: mockProfessionals[1],
-    date: '2026-04-18',
-    time: '15:00',
-    reason: 'Electrocardiograma de control',
-    status: 'completed',
-    createdAt: '2026-03-30',
-  },
-  {
-    id: 'a4',
-    userId: 'u1',
-    professionalId: 'p4',
-    professional: mockProfessionals[3],
-    date: '2026-03-25',
-    time: '08:30',
-    reason: 'Dolor en rodilla derecha',
-    status: 'cancelled',
-    createdAt: '2026-03-10',
-  },
-  {
-    id: 'a5',
-    userId: 'u1',
-    professionalId: 'p5',
-    professional: mockProfessionals[4],
-    date: '2026-05-20',
-    time: '11:00',
-    reason: 'Control pediátrico (hijo)',
-    status: 'pending',
-    createdAt: '2026-04-28',
-  },
+const reasons = [
+  'Consulta de rutina anual',
+  'Dolor de cabeza recurrente',
+  'Revisión preventiva',
+  'Control de presión arterial',
+  'Seguimiento de tratamiento',
+  'Revisión de piel',
+  'Dolor articular',
+  'Control pediátrico',
 ];
 
-export const mockNotifications: Notification[] = [
-  {
-    id: 'n1',
-    userId: 'u1',
-    title: 'Recordatorio de cita',
-    message: 'Tienes una cita con Dra. Ana Martínez mañana a las 09:00',
-    type: 'reminder',
-    read: false,
-    createdAt: '2026-05-09T08:00:00',
-  },
-  {
-    id: 'n2',
-    userId: 'u1',
-    title: 'Cita confirmada',
-    message: 'Tu cita con Dra. Sofía Herrera el 15 de mayo fue confirmada.',
-    type: 'confirmation',
-    read: false,
-    createdAt: '2026-04-22T14:30:00',
-  },
-  {
-    id: 'n3',
-    userId: 'u1',
-    title: 'Cita cancelada',
-    message: 'Tu cita con Dr. Luis Pacheco del 25 de marzo fue cancelada.',
-    type: 'cancellation',
-    read: true,
-    createdAt: '2026-03-24T10:00:00',
-  },
+const notesList = [
+  'Traer exámenes recientes si los tienes',
+  'Llegar 10 minutos antes',
+  'Evitar cafeína 4 horas antes',
+  'Anotar síntomas y medicamentos',
 ];
+
+export const mockAppointments: Appointment[] = Array.from({ length: 5 }).map((_, idx) => {
+  const pro = pickOne(rng, mockProfessionals);
+  const status = pickOne(rng, ['scheduled', 'completed', 'pending', 'cancelled'] as const);
+  const isFuture = status === 'scheduled' || status === 'pending';
+  const dayOffset = isFuture ? intBetween(rng, 2, 30) : -intBetween(rng, 5, 60);
+  const apptDate = dateFromNow(dayOffset);
+  const createdAt = dateFromNow(dayOffset - intBetween(rng, 3, 20));
+  const time = pickOne(rng, pro.availableHours);
+
+  return {
+    id: `a${idx + 1}`,
+    userId: 'u1',
+    professionalId: pro.id,
+    professional: pro,
+    date: formatDate(apptDate),
+    time,
+    reason: pickOne(rng, reasons),
+    notes: rng() > 0.5 ? pickOne(rng, notesList) : undefined,
+    status,
+    createdAt: formatDate(createdAt),
+  };
+});
+
+export const mockNotifications: Notification[] = Array.from({ length: 3 }).map((_, idx) => {
+  const appt = pickOne(rng, mockAppointments);
+  const proName = appt.professional.name;
+  const type = pickOne(rng, ['reminder', 'confirmation', 'cancellation', 'info'] as const);
+  const titleMap: Record<(typeof type)[number], string> = {
+    reminder: 'Recordatorio de cita',
+    confirmation: 'Cita confirmada',
+    cancellation: 'Cita cancelada',
+    info: 'Información',
+  };
+  const msgMap: Record<(typeof type)[number], string> = {
+    reminder: `Tienes una cita con ${proName} el ${appt.date} a las ${appt.time}`,
+    confirmation: `Tu cita con ${proName} el ${appt.date} fue confirmada.`,
+    cancellation: `Tu cita con ${proName} del ${appt.date} fue cancelada.`,
+    info: 'Puedes gestionar tus notificaciones desde la sección de ajustes.',
+  };
+  const createdAt = dateFromNow(-intBetween(rng, 0, 25));
+  createdAt.setHours(intBetween(rng, 8, 19), pickOne(rng, [0, 15, 30, 45]), 0, 0);
+
+  return {
+    id: `n${idx + 1}`,
+    userId: 'u1',
+    title: titleMap[type],
+    message: msgMap[type],
+    type,
+    read: rng() > 0.6,
+    createdAt: formatIso(createdAt),
+  };
+});
 
 export const mockNotificationSettings: NotificationSettings = {
   emailEnabled: true,

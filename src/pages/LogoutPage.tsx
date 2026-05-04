@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { LogOut, Calendar } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { LogOut, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 
@@ -21,41 +21,53 @@ export default function LogoutPage() {
 
   if (done) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Calendar size={28} className="text-blue-600" />
+      <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-sm w-full animate-in zoom-in duration-300">
+          <div className="w-20 h-20 bg-[#95D5D2]/20 rounded-full flex items-center justify-center mx-auto mb-6 text-[#204E59]">
+            <CheckCircle2 size={48} />
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">¡Hasta pronto!</h2>
-          <p className="text-slate-500 text-sm">Has cerrado sesión exitosamente. Redirigiendo...</p>
+          <h2 className="text-2xl font-black text-[#204E59] mb-2">¡Hasta pronto!</h2>
+          <p className="text-slate-500 text-sm mb-1">Has cerrado sesión exitosamente.</p>
+          <p className="text-slate-400 text-xs">Redirigiendo al portal...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
-      <div className="w-full max-w-sm">
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 text-center">
-          <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <LogOut size={28} className="text-red-400" />
-          </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">Cerrar sesión</h2>
-          <p className="text-slate-500 text-sm mb-2">
+    <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-sm w-full animate-in zoom-in duration-300">
+        <div className="w-20 h-20 bg-[#F26C6D]/10 rounded-full flex items-center justify-center mx-auto mb-6 text-[#F26C6D]">
+          <LogOut size={40} />
+        </div>
+        
+        <h2 className="text-2xl font-black text-[#204E59] mb-3">Cerrar sesión</h2>
+        
+        <div className="space-y-1 mb-8">
+          <p className="text-slate-600 text-sm font-medium">
             {user?.name ? `Hola ${user.name.split(' ')[0]}, ` : ''}¿Estás seguro de que quieres salir?
           </p>
-          <p className="text-slate-400 text-xs mb-6">Tendrás que iniciar sesión nuevamente para acceder a tu cuenta.</p>
+          <p className="text-slate-400 text-xs">Tendrás que iniciar sesión nuevamente para acceder a tu cuenta.</p>
+        </div>
 
-          <div className="flex flex-col gap-3">
-            <Button variant="danger" onClick={handleLogout} loading={loading} className="w-full" size="lg">
-              Sí, cerrar sesión
-            </Button>
-            <Link to="/dashboard">
-              <Button variant="outline" className="w-full" size="lg">
-                Cancelar
-              </Button>
-            </Link>
-          </div>
+        <div className="flex gap-3">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/dashboard')} 
+            className="flex-1" 
+            size="lg"
+          >
+            Cancelar
+          </Button>
+          <Button 
+            variant="danger" 
+            onClick={handleLogout} 
+            loading={loading} 
+            className="flex-1" 
+            size="lg"
+          >
+            Sí, cerrar sesión
+          </Button>
         </div>
       </div>
     </div>

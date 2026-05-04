@@ -8,12 +8,16 @@ import {
   LogOut,
   ChevronRight
 } from 'lucide-react';
+import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import Modal from '../ui/Modal';
+import Button from '../ui/Button';
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
   const menuItems = [
     { to: '/dashboard', label: 'Panel Principal', icon: LayoutDashboard },
@@ -23,13 +27,25 @@ export default function Sidebar() {
     { to: '/profile', label: 'Mi Perfil', icon: User },
   ];
 
-  const handleLogout = () => {
+  const handleLogoutConfirm = () => {
     logout();
+    setLogoutOpen(false);
     navigate('/');
   };
 
   return (
     <aside className="w-72 bg-[#204E59] text-white flex flex-col h-screen sticky top-0 left-0 overflow-hidden shadow-2xl">
+      <Modal isOpen={logoutOpen} onClose={() => setLogoutOpen(false)} title="Cerrar sesión" size="sm">
+        <p className="text-white/80 text-sm">¿Estás seguro de que quieres cerrar sesión?</p>
+        <div className="mt-6 flex gap-3 justify-end">
+          <Button variant="outline" onClick={() => setLogoutOpen(false)}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleLogoutConfirm}>
+            Sí, cerrar sesión
+          </Button>
+        </div>
+      </Modal>
       {/* Brand */}
       <div className="p-8">
         <Link to="/dashboard" className="flex items-center gap-3 group">
@@ -83,7 +99,7 @@ export default function Sidebar() {
             </div>
           </div>
           <button
-            onClick={handleLogout}
+            onClick={() => setLogoutOpen(true)}
             className="flex items-center gap-2 w-full py-3 px-4 bg-white/10 hover:bg-[#F26C6D] text-white rounded-xl transition-all duration-300 font-bold text-xs"
           >
             <LogOut size={14} />
