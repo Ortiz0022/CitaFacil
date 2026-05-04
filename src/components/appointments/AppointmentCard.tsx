@@ -18,18 +18,21 @@ export default function AppointmentCard({ appointment, onCancel, onEdit, compact
   const formattedDate = format(parsedDate, "d 'de' MMMM, yyyy", { locale: es });
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-3">
-        <img
-          src={professional.avatar}
-          alt={professional.name}
-          className="w-12 h-12 rounded-xl object-cover bg-slate-100 flex-shrink-0"
-        />
+    <div className="bg-white rounded-3xl border border-[#95D5D2]/30 shadow-sm hover:shadow-xl hover:border-[#204E59]/20 transition-all duration-500 p-6 group">
+      <div className="flex items-start gap-5">
+        <div className="relative">
+          <img
+            src={professional.avatar}
+            alt={professional.name}
+            className="w-16 h-16 rounded-2xl object-cover bg-[#95D5D2]/10 flex-shrink-0 border-2 border-white shadow-sm"
+          />
+          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#66B2B2] border-2 border-white rounded-full" />
+        </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <p className="font-semibold text-slate-900 text-sm">{professional.name}</p>
-              <p className="text-xs text-blue-600 font-medium">{professional.specialty}</p>
+              <p className="font-black text-[#204E59] text-lg leading-tight">{professional.name}</p>
+              <p className="text-[10px] text-[#66B2B2] font-black tracking-widest uppercase mt-0.5">{professional.specialty}</p>
             </div>
             <StatusBadge status={status} />
           </div>

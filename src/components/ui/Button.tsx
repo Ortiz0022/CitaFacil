@@ -19,11 +19,11 @@ export default function Button({
   const base = 'inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-all duration-200 cursor-pointer select-none';
 
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 active:scale-95 shadow-[0_4px_14px_0_rgba(37,99,235,0.3)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)]',
-    secondary: 'bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95 shadow-[0_4px_14px_0_rgba(16,185,129,0.3)]',
-    outline: 'border-2 border-slate-200 text-slate-700 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 active:scale-95',
-    ghost: 'text-slate-600 hover:bg-slate-100 active:scale-95',
-    danger: 'bg-red-500 text-white hover:bg-red-600 active:scale-95 shadow-[0_4px_14px_0_rgba(239,68,68,0.3)]',
+    primary: 'bg-[#204E59] text-white hover:bg-[#16363E] active:scale-95 shadow-[0_4px_14px_0_rgba(32,78,89,0.3)]',
+    secondary: 'bg-[#95D5D2] text-[#204E59] hover:bg-[#82C2BF] active:scale-95 shadow-[0_4px_14px_0_rgba(149,213,210,0.3)]',
+    outline: 'border-2 border-[#95D5D2]/50 text-[#204E59] hover:border-[#204E59] hover:bg-[#95D5D2]/10 active:scale-95',
+    ghost: 'text-[#204E59] hover:bg-[#95D5D2]/10 active:scale-95',
+    danger: 'bg-[#F26C6D] text-white hover:bg-[#D95B5C] active:scale-95 shadow-[0_4px_14px_0_rgba(242,108,109,0.3)]',
   };
 
   const sizes = {

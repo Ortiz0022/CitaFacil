@@ -14,6 +14,7 @@ import AppointmentsPage from './pages/AppointmentsPage';
 import ProfilePage from './pages/ProfilePage';
 import NotificationsPage from './pages/NotificationsPage';
 import LogoutPage from './pages/LogoutPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/dashboard" element={<DashboardPage />} />

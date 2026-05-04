@@ -38,119 +38,165 @@ export default function ProfilePage() {
     setPassSaved(true);
     setTimeout(() => setPassSaved(false), 3000);
   };
-
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Mi Perfil</h1>
-        <p className="text-slate-500 text-sm mt-1">Gestiona tu información personal</p>
+    <div className="max-w-3xl mx-auto space-y-10 pb-16">
+      <div className="flex items-end justify-between">
+        <div>
+          <h1 className="text-4xl font-black text-[#204E59] tracking-tighter">Mi Perfil</h1>
+          <p className="text-slate-500 mt-2 font-medium">Gestiona tu información y preferencias.</p>
+        </div>
+        <div className="hidden sm:block">
+          <span className="text-[10px] font-black text-[#66B2B2] uppercase tracking-[0.2em] bg-[#95D5D2]/10 px-4 py-2 rounded-full border border-[#95D5D2]/20">
+            ID: {user?.id.slice(0, 8)}
+          </span>
+        </div>
       </div>
 
       {/* Avatar section */}
-      <Card className="p-6">
-        <div className="flex items-center gap-4">
-          <img
-            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${name}&backgroundColor=b6e3f4`}
-            alt={name}
-            className="w-20 h-20 rounded-2xl bg-blue-100"
-          />
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">{user?.name}</h2>
-            <p className="text-sm text-slate-500">{user?.email}</p>
-            <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
-              <User size={10} /> Paciente
-            </span>
+      <Card className="p-10 border-[#95D5D2]/20 bg-gradient-to-br from-white to-[#F4F7F7]">
+        <div className="flex flex-col sm:flex-row items-center gap-8">
+          <div className="relative group">
+            <img
+              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${name}&backgroundColor=95d5d2`}
+              alt={name}
+              className="w-32 h-32 rounded-[2.5rem] bg-[#95D5D2]/20 shadow-2xl transition-transform group-hover:scale-105 duration-500"
+            />
+            <div className="absolute -bottom-3 -right-3 w-10 h-10 bg-[#204E59] rounded-2xl border-4 border-white flex items-center justify-center text-white shadow-lg">
+              <CheckCircle2 size={18} />
+            </div>
+          </div>
+          <div className="text-center sm:text-left space-y-3">
+            <h2 className="text-3xl font-black text-[#204E59] tracking-tight">{user?.name}</h2>
+            <div className="flex items-center justify-center sm:justify-start gap-4">
+              <p className="text-slate-500 font-bold">{user?.email}</p>
+              <div className="w-1 h-1 bg-slate-300 rounded-full" />
+              <span className="text-xs font-black text-[#66B2B2] uppercase tracking-widest">Paciente Pro</span>
+            </div>
           </div>
         </div>
       </Card>
 
-      {/* Personal info */}
-      <Card className="p-6">
-        <h3 className="font-semibold text-slate-900 mb-4">Información personal</h3>
-        <div className="space-y-4">
-          <Input
-            label="Nombre completo"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            icon={<User size={16} />}
-            placeholder="Tu nombre"
-          />
-          <Input
-            label="Correo electrónico"
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            icon={<Mail size={16} />}
-            placeholder="tu@email.com"
-          />
-          <Input
-            label="Teléfono"
-            type="tel"
-            value={phone}
-            onChange={e => setPhone(e.target.value)}
-            icon={<Phone size={16} />}
-            placeholder="+506 8888-0000"
-          />
-        </div>
-
-        {saved && (
-          <div className="flex items-center gap-2 mt-4 text-emerald-600 bg-emerald-50 rounded-xl px-4 py-2.5 text-sm">
-            <CheckCircle2 size={16} /> Perfil actualizado exitosamente
+      <div className="grid grid-cols-1 gap-10">
+        {/* Personal info */}
+        <Card className="p-10">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-12 h-12 bg-[#95D5D2]/20 rounded-2xl flex items-center justify-center text-[#204E59]">
+              <User size={24} />
+            </div>
+            <h3 className="font-black text-2xl text-[#204E59]">Datos Personales</h3>
           </div>
-        )}
-
-        <Button onClick={handleSaveProfile} loading={saving} className="mt-4 gap-2">
-          <Save size={14} /> Guardar cambios
-        </Button>
-      </Card>
-
-      {/* Password */}
-      <Card className="p-6">
-        <h3 className="font-semibold text-slate-900 mb-4">Cambiar contraseña</h3>
-        <div className="space-y-4">
-          <Input
-            label="Contraseña actual"
-            type="password"
-            value={currentPass}
-            onChange={e => setCurrentPass(e.target.value)}
-            icon={<Lock size={16} />}
-            placeholder="••••••••"
-          />
-          <Input
-            label="Nueva contraseña"
-            type="password"
-            value={newPass}
-            onChange={e => setNewPass(e.target.value)}
-            icon={<Lock size={16} />}
-            placeholder="Mínimo 6 caracteres"
-          />
-          <Input
-            label="Confirmar nueva contraseña"
-            type="password"
-            value={confirmPass}
-            onChange={e => setConfirmPass(e.target.value)}
-            icon={<Lock size={16} />}
-            placeholder="Repite la contraseña"
-            error={passError}
-          />
-        </div>
-
-        {passSaved && (
-          <div className="flex items-center gap-2 mt-4 text-emerald-600 bg-emerald-50 rounded-xl px-4 py-2.5 text-sm">
-            <CheckCircle2 size={16} /> Contraseña actualizada exitosamente
+          
+          <div className="space-y-6">
+            <Input
+              label="Nombre completo"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              icon={<User size={18} className="text-[#66B2B2]" />}
+              placeholder="Tu nombre"
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input
+                label="Correo electrónico"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                icon={<Mail size={18} className="text-[#66B2B2]" />}
+                placeholder="tu@email.com"
+              />
+              <Input
+                label="Teléfono de contacto"
+                type="tel"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                icon={<Phone size={18} className="text-[#66B2B2]" />}
+                placeholder="+506 8888-0000"
+              />
+            </div>
           </div>
-        )}
 
-        <Button
-          onClick={handleSavePassword}
-          loading={saving}
-          disabled={!currentPass || !newPass || !confirmPass}
-          variant="outline"
-          className="mt-4 gap-2"
-        >
-          <Lock size={14} /> Actualizar contraseña
-        </Button>
-      </Card>
+          {saved && (
+            <div className="mt-8 flex items-center gap-3 text-[#204E59] bg-[#95D5D2]/20 rounded-2xl px-6 py-4 text-sm font-black border border-[#95D5D2]/30 animate-in fade-in slide-in-from-top-2">
+              <CheckCircle2 size={20} /> ¡Perfil actualizado exitosamente!
+            </div>
+          )}
+
+          <Button onClick={handleSaveProfile} loading={saving} className="mt-10 h-14 px-10 gap-3">
+            <Save size={20} /> Guardar Cambios
+          </Button>
+        </Card>
+
+        {/* Password */}
+        <Card className="p-10 border-slate-100">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-12 h-12 bg-[#F26C6D]/10 rounded-2xl flex items-center justify-center text-[#F26C6D]">
+              <Lock size={24} />
+            </div>
+            <h3 className="font-black text-2xl text-[#204E59]">Seguridad</h3>
+          </div>
+
+          <div className="space-y-6">
+            <Input
+              label="Contraseña actual"
+              type="password"
+              value={currentPass}
+              onChange={e => {
+                setCurrentPass(e.target.value);
+                setPassError('');
+              }}
+              icon={<Lock size={18} className="text-[#66B2B2]" />}
+              placeholder="••••••••"
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input
+                label="Nueva contraseña"
+                type="password"
+                value={newPass}
+                onChange={e => {
+                  setNewPass(e.target.value);
+                  setPassError('');
+                }}
+                icon={<Lock size={18} className="text-[#66B2B2]" />}
+                placeholder="Mínimo 6 caracteres"
+                error={newPass && newPass.length < 6 ? 'Demasiado corta' : ''}
+              />
+              <Input
+                label="Confirmar nueva contraseña"
+                type="password"
+                value={confirmPass}
+                onChange={e => {
+                  setConfirmPass(e.target.value);
+                  setPassError('');
+                }}
+                icon={<Lock size={18} className="text-[#66B2B2]" />}
+                placeholder="Repite la contraseña"
+                error={confirmPass && newPass !== confirmPass ? 'No coinciden' : ''}
+              />
+            </div>
+          </div>
+
+          {passError && (
+            <div className="mt-8 text-[#F26C6D] bg-[#F26C6D]/5 border border-[#F26C6D]/20 rounded-2xl px-6 py-4 text-sm font-black">
+              {passError}
+            </div>
+          )}
+
+          {passSaved && (
+            <div className="mt-8 flex items-center gap-3 text-[#204E59] bg-[#95D5D2]/20 rounded-2xl px-6 py-4 text-sm font-black border border-[#95D5D2]/30">
+              <CheckCircle2 size={20} /> Contraseña actualizada con éxito
+            </div>
+          )}
+
+          <Button
+            onClick={handleSavePassword}
+            loading={saving}
+            disabled={!currentPass || !newPass || !confirmPass || newPass !== confirmPass || newPass.length < 6}
+            variant="primary"
+            className="mt-10 h-14 px-10 gap-3 bg-[#635671] hover:bg-[#4D4258]"
+          >
+            <Lock size={20} /> Actualizar Seguridad
+          </Button>
+        </Card>
+      </div>
     </div>
   );
 }

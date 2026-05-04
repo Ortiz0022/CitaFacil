@@ -22,7 +22,7 @@ export default function Input({ label, error, icon, className = '', ...props }: 
           className={`
             w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-900
             placeholder:text-slate-400
-            focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white
+            focus:outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 focus:bg-white
             transition-all duration-300
             ${icon ? 'pl-11' : ''}
             ${error ? 'border-red-400 focus:ring-red-400' : ''}
