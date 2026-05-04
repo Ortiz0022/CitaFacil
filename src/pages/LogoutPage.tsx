@@ -26,9 +26,10 @@ export default function LogoutPage() {
           <div className="w-20 h-20 bg-[#95D5D2]/20 rounded-full flex items-center justify-center mx-auto mb-6 text-[#204E59]">
             <CheckCircle2 size={48} />
           </div>
-          <h2 className="text-2xl font-black text-[#204E59] mb-2">¡Hasta pronto!</h2>
-          <p className="text-slate-500 text-sm mb-1">Has cerrado sesión exitosamente.</p>
-          <p className="text-slate-400 text-xs">Redirigiendo al portal...</p>
+          <h2 className="text-2xl font-black text-[#204E59] mb-2">¡Gracias por usar CitaFácil!</h2>
+          <p className="text-slate-500 text-sm mb-1">Tu sesión ha sido cerrada de forma segura.</p>
+          <p className="text-slate-400 text-xs mb-3">Esperamos verte pronto para cuidar tu salud.</p>
+          <p className="text-slate-300 text-xs">Redirigiendo al portal principal...</p>
         </div>
       </div>
     );
