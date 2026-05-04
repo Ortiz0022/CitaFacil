@@ -10,6 +10,7 @@ interface AuthContextType {
   logout: () => void;
   updateUser: (data: Partial<User>) => void;
   resetPassword: (email: string, newPassword: string) => Promise<boolean>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -115,8 +116,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return false;
   };
 
+  const changePassword = async (currentPassword: string, newPassword: string): Promise<boolean> => {
+    await new Promise(r => setTimeout(r, 800));
+    if (!user) return false;
+
+    const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+    let userIndex = registeredUsers.findIndex((u: any) => u.email.toLowerCase() === user.email.toLowerCase());
+
+    // Si es el usuario demo y no está en registered_users, lo buscamos específicamente
+    if (userIndex === -1 && user.email === 'juan.garcia@email.com') {
+      if (currentPassword !== 'demo1234') {
+        throw new Error('La contraseña actual es incorrecta.');
+      }
+      // Lo agregamos para que ahora sí esté en registered_users con la nueva pass
+      const newUser = { ...mockUser, email: user.email, password: newPassword };
+      registeredUsers.push(newUser);
+      localStorage.setItem('registered_users', JSON.stringify(registeredUsers));
+      return true;
+    }
+
+    if (userIndex !== -1) {
+      if (registeredUsers[userIndex].password !== currentPassword) {
+        throw new Error('La contraseña actual es incorrecta.');
+      }
+      registeredUsers[userIndex].password = newPassword;
+      localStorage.setItem('registered_users', JSON.stringify(registeredUsers));
+      return true;
+    }
+
+    return false;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, register, logout, updateUser, resetPassword }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, register, logout, updateUser, resetPassword, changePassword }}>
       {children}
     </AuthContext.Provider>
   );

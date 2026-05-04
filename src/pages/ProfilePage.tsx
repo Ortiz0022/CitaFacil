@@ -6,7 +6,7 @@ import Input from '../components/ui/Input';
 import Card from '../components/ui/Card';
 
 export default function ProfilePage() {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, changePassword } = useAuth();
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState(user?.phone || '');
@@ -31,12 +31,18 @@ export default function ProfilePage() {
     setPassError('');
     if (newPass.length < 6) { setPassError('La nueva contraseña debe tener al menos 6 caracteres.'); return; }
     if (newPass !== confirmPass) { setPassError('Las contraseñas no coinciden.'); return; }
+    
     setSaving(true);
-    await new Promise(r => setTimeout(r, 600));
-    setSaving(false);
-    setCurrentPass(''); setNewPass(''); setConfirmPass('');
-    setPassSaved(true);
-    setTimeout(() => setPassSaved(false), 3000);
+    try {
+      await changePassword(currentPass, newPass);
+      setSaving(false);
+      setCurrentPass(''); setNewPass(''); setConfirmPass('');
+      setPassSaved(true);
+      setTimeout(() => setPassSaved(false), 3000);
+    } catch (error: any) {
+      setSaving(false);
+      setPassError(error.message || 'Ocurrió un error al cambiar la contraseña.');
+    }
   };
   return (
     <div className="max-w-3xl mx-auto space-y-10 pb-16">
