@@ -18,18 +18,22 @@ export default function HomePage() {
       <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <nav className="glass-morphism rounded-2xl px-6 h-16 flex items-center justify-between shadow-lg shadow-teal-900/5">
-            <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
               <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-200">
                 <Calendar size={20} className="text-white" />
               </div>
               <span className="font-bold text-2xl tracking-tight text-slate-900" style={{ fontFamily: 'Sora, sans-serif' }}>
                 Cita<span className="text-teal-600">Fácil</span>
               </span>
-            </div>
+            </Link>
             <div className="hidden md:flex items-center gap-8 mr-auto ml-12">
-              {['Características', 'Especialidades', 'Cómo funciona'].map((item) => (
-                <a key={item} href="#" className="text-sm font-semibold text-slate-600 hover:text-teal-600 transition-colors">
-                  {item}
+              {[
+                { name: 'Características', href: '#features' },
+                { name: 'Especialidades', href: '#specialties' },
+                { name: 'Cómo funciona', href: '#how-it-works' }
+              ].map((item) => (
+                <a key={item.name} href={item.href} className="text-sm font-semibold text-slate-600 hover:text-teal-600 transition-colors">
+                  {item.name}
                 </a>
               ))}
             </div>
@@ -125,7 +129,7 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="py-32 bg-slate-50/50">
+      <section id="features" className="py-32 bg-slate-50/50 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h2 className="text-5xl font-black text-slate-900 mb-8 tracking-tight">Diseñado para la excelencia</h2>
@@ -146,7 +150,7 @@ export default function HomePage() {
       </section>
 
       {/* Specialties */}
-      <section className="py-32">
+      <section id="specialties" className="py-32 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
             <div>
@@ -164,6 +168,33 @@ export default function HomePage() {
                 <span className="text-base font-bold text-slate-700 group-hover:text-teal-700">{s}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section id="how-it-works" className="py-32 bg-slate-50/50 scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <h2 className="text-5xl font-black text-slate-900 mb-8 tracking-tight">¿Cómo funciona?</h2>
+            <p className="text-xl text-slate-500 font-medium">Tres simples pasos para cuidar de tu salud con CitaFácil.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-10">
+            <div className="relative p-10 bg-white rounded-[2rem] shadow-sm border border-transparent hover:border-teal-100 transition-all hover:shadow-xl duration-500">
+              <div className="w-14 h-14 bg-teal-600 text-white rounded-2xl flex items-center justify-center font-black text-2xl mb-8 shadow-lg shadow-teal-200">1</div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Regístrate</h3>
+              <p className="text-slate-500 font-medium leading-relaxed">Crea tu cuenta de forma gratuita y segura en menos de un minuto.</p>
+            </div>
+            <div className="relative p-10 bg-white rounded-[2rem] shadow-sm border border-transparent hover:border-teal-100 transition-all hover:shadow-xl duration-500">
+              <div className="w-14 h-14 bg-teal-600 text-white rounded-2xl flex items-center justify-center font-black text-2xl mb-8 shadow-lg shadow-teal-200">2</div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Elige Especialista</h3>
+              <p className="text-slate-500 font-medium leading-relaxed">Filtra por especialidad, ubicación o valoraciones de otros pacientes.</p>
+            </div>
+            <div className="relative p-10 bg-white rounded-[2rem] shadow-sm border border-transparent hover:border-teal-100 transition-all hover:shadow-xl duration-500">
+              <div className="w-14 h-14 bg-teal-600 text-white rounded-2xl flex items-center justify-center font-black text-2xl mb-8 shadow-lg shadow-teal-200">3</div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Reserva tu Cita</h3>
+              <p className="text-slate-500 font-medium leading-relaxed">Selecciona el horario que mejor te convenga y recibe confirmación inmediata.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -209,9 +240,9 @@ export default function HomePage() {
             <div>
               <h4 className="font-black text-slate-900 mb-8 uppercase tracking-widest text-sm">Producto</h4>
               <ul className="space-y-5 text-lg text-slate-500 font-medium">
-                <li><a href="#" className="hover:text-teal-600 transition-colors">Especialistas</a></li>
-                <li><a href="#" className="hover:text-teal-600 transition-colors">Cómo funciona</a></li>
-                <li><a href="#" className="hover:text-teal-600 transition-colors">Seguridad</a></li>
+                <li><a href="#specialties" className="hover:text-teal-600 transition-colors">Especialistas</a></li>
+                <li><a href="#how-it-works" className="hover:text-teal-600 transition-colors">Cómo funciona</a></li>
+                <li><a href="#features" className="hover:text-teal-600 transition-colors">Seguridad</a></li>
               </ul>
             </div>
             <div>
